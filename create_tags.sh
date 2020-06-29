@@ -16,15 +16,15 @@ if [ "$tag_type" == "kernel" ]; then
         \(                          \
         -path ./.git -o             \
         -path ./Documentation       \
-        \)
+        \)                          \
         -prune -o                   \
         -type f                     \
         \(                          \
         -name "*.[chxsS]" -o        \
         -name "*.cpp"     -o        \
         -name ".dts"                \
-        \)
-        -print > gatags.files
+        \)                          \
+        -print > gtags.files
 
         echo "Create kernel tags"
 fi
