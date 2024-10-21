@@ -1,0 +1,469 @@
+set nocompatible
+filetype off                  " required
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim/
+call vundle#begin()
+Plugin 'gmarik/Vundle.vim'
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'tomasiser/vim-code-dark'
+Plugin 'morhetz/gruvbox'
+
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+
+Plugin 'majutsushi/tagbar'
+Plugin 'preservim/nerdtree'
+
+Plugin 'mileszs/ack.vim'
+Plugin 'Yggdroot/leaderF'
+
+Plugin 'octol/vim-cpp-enhanced-highlight'
+Plugin 'jaxbot/semantic-highlight.vim'
+
+Plugin 'jsfaint/gen_tags.vim'
+Plugin 'easymotion/vim-easymotion'
+
+Plugin 'zivyangll/git-blame.vim'
+Plugin 'tpope/vim-fugitive'
+Plugin 'Valloric/YouCompleteMe'
+
+Plugin 'kshenoy/vim-signature'
+Plugin 'brooth/far.vim'
+
+Plugin 'fholgado/minibufexpl.vim'
+"Plugin 'wesleyche/SrcExpl'
+"Plugin 'jiangmiao/auto-pairs'
+"Plugin 'ctrlpvim/ctrlp.vim'
+call vundle#end()            " required
+filetype plugin indent on    " required
+
+"personal setting
+set encoding=utf-8
+set fileencoding=utf-8
+set termencoding=utf-8
+set cursorline
+" set clipboard=unnamed
+set clipboard=unnamedplus
+set noswapfile
+set nowrap
+set nobackup
+
+"highlight word
+syntax on
+set hlsearch
+set number
+set incsearch
+
+"set tab
+"set listchars=tab:>-
+set list listchars=tab:»·,trail:·
+set tabstop=4
+set shiftwidth=4 "針對程式縮排所需要的 Space 個數
+set shiftround
+set expandtab
+set softtabstop=-1
+inoremap <S-Tab> <C-V><Tab>
+set smartindent
+
+set splitright
+set splitbelow
+
+let g:cpp_class_scope_highlight = 1
+let g:cpp_member_variable_highlight = 1
+let g:cpp_class_decl_highlight = 1
+let g:cpp_posix_standard = 1
+let g:cpp_experimental_simple_template_highlight = 1
+let g:cpp_experimental_template_highlight = 1
+let g:cpp_concepts_highlight = 1
+
+"tag
+"let g:loaded_gentags#ctags=1
+"let g:loaded_gentags#gtags=0
+"let g:gen_tags#gtags_default_map=1
+
+" let gtags_dir=expand('.vim/bundle/gen_tags.vim/plugin/gen_tags.vim')
+" if isdirectory(gtags_dir)
+let g:loaded_gentags#ctags=1
+let g:loaded_gentags#gtags=0
+let g:gen_tags#use_cache_dir=0
+let g:gen_tags#gtags_default_map=1
+" endif
+
+
+" let $GTAGSLABEL = 'native-pygments'
+" let $GTAGSCONF = '/usr/local/share/gtags/gtags.conf'
+" let g:gutentags_modules = ['ctags', 'gtags_cscope']
+" let g:gutentags_modules = ['gtags_cscope']
+" let g:gutentags_trace = 1
+
+"set tags=./.tags;,.tags
+"let g:gutentags_define_advanced_commands = 1
+
+"gutentags 搜索工程目录的标志，当前文件路径向上递归直到碰到这些文件/目录名
+" let g:gutentags_project_root = ['.root', '.svn', '.git', '.hg', '.project']
+" let g:gutentags_project_root = ['.root']
+
+" 所生成的数据文件的名称
+" let g:gutentags_ctags_tagfile = '.tags'
+
+" 同时开启 ctags 和 gtags 支持：
+" let g:gutentags_modules = []
+" if executable('ctags')
+" let g:gutentags_modules += ['ctags']
+" endif
+" if executable('gtags-cscope') && executable('gtags')
+" let g:gutentags_modules += ['gtags_cscope']
+" endif
+
+" "将自动生成的 ctags/gtags 文件全部放入 ~/.cache/tags 目录中，避免污染工程目录
+" let g:gutentags_cache_dir = expand('~/.cache/tags')
+
+" " 配置 ctags 的参数，老的 Exuberant-ctags 不能有 --extra=+q，注意
+" let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extra=+q']
+" let g:gutentags_ctags_extra_args += ['--c++-kinds=+px']
+" let g:gutentags_ctags_extra_args += ['--c-kinds=+px']
+
+" " 如果使用 universal ctags 需要增加下面一行，老的 Exuberant-ctags 不能加下一行
+" let g:gutentags_ctags_extra_args += ['--output-format=e-ctags']
+
+" 禁用 gutentags 自动加载 gtags 数据库的行为
+"let g:gutentags_auto_add_gtags_cscope = 0
+
+"set leader key to ','
+let mapleader=","
+
+"set ; to :
+nnoremap ; :
+
+"exit vim terminal
+tnoremap <Esc> <C-\><C-n>
+
+"folding
+set foldmethod=syntax
+set foldlevel=20
+set foldcolumn=2
+nnoremap <silent> <Space> @=(foldlevel('.')?'za':"\<Space>")<CR> 
+vnoremap <Space> zf
+
+ inoremap {<CR> {<CR>}<ESC>0
+ inoremap {{ {
+
+"SemanticHighlight to convert variables into colors jaxbot/semantic-highlight.vim
+"nnoremap <Leader>h :SemanticHighlightToggle<cr>
+
+"vim 打開文件時光標返回上次的離開位置
+" au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe norm $"|endif|endif
+au BufReadPost * if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit' |   exe "normal! g`\"" | endif
+
+"Vim 自動回到檔案最後讀取位置
+if has("autocmd")
+  autocmd BufRead *.txt set tw=78
+  autocmd BufReadPost *
+  \ if line("'\"") > 0 && line ("'\"") <= line("$") |
+  " \   exe "normal g'\"" |
+  \ endif
+endif
+
+" Search for selected text, forwards or backwards.
+vnoremap <silent> * :<C-U>
+  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+  \gvy/<C-R>=&ic?'\c':'\C'<CR><C-R><C-R>=substitute(
+  \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+  \gVzv:call setreg('"', old_reg, old_regtype)<CR>
+vnoremap <silent> # :<C-U>
+  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+  \gvy?<C-R>=&ic?'\c':'\C'<CR><C-R><C-R>=substitute(
+  \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+  \gVzv:call setreg('"', old_reg, old_regtype)<CR>
+
+"set colorsheme
+set t_Co=256
+set t_ut=
+" colorscheme codedark
+colorscheme gruvbox
+" 設定色調
+set background=dark
+" Airline ------------------------------
+let g:airline_theme = 'codedark'
+"let g:airline_theme = 'luna'
+let g:airline_section_c = '%<%F%m %#__accent_red#%{airline#util#wrap(airline#parts#readonly(),0)}%#__restore__#'
+"smart tab line
+let g:airline#extensions#tabline#enabled = 0
+" set left separator
+" let g:airline#extensions#tabline#left_sep = ' '
+" set left separator which are not editting
+" let g:airline#extensions#tabline#left_alt_sep = '|'
+" show buffer number
+" let g:airline#extensions#tabline#buffer_nr_show = 1
+" let g:airline#extensions#tabline#formatter = 'unique_tail'
+" let g:airline#extensions#tabline#tab_nr_type = 1 " tab number
+""enable/disable displaying open splits per tab (only when tabs are opened). >
+" let g:airline#extensions#tabline#show_splits = 1
+" to use fancy symbols for airline, uncomment the following lines and use a
+" patched font (more info on the README.rst)
+"if !exists('g:airline_symbols')
+"   let g:airline_symbols = {}
+"endif
+" let g:choosewin_overlay_enable = 1
+let g:airline_powerline_fonts = 1
+" let g:airline_left_sep = '▶'
+" let g:airline_left_alt_sep = '❯'
+" let g:airline_right_sep = '◀'
+" let g:airline_right_alt_sep = '❮'
+
+"find file
+" set runtimepath^=~/.vim/bundle/ctrlp.vim
+" let g:ctrlp_map = '<leader>p'
+" let g:ctrlp_cmd = 'CtrlP'
+" map <leader>f :CtrlPMRU<CR>
+" let g:ctrlp_custom_ignore = {
+  " " \ 'dir':  '\v[\/]\.(git|hg|svn|rvm)$',
+  " " \ 'file': '\v\.(exe|so|dll|zip|tar|tar.gz|pyc)$',
+  " " \ }
+" let g:ctrlp_working_path_mode=0
+" let g:ctrlp_match_window_bottom=1
+" let g:ctrlp_max_height=15
+" let g:ctrlp_match_window_reversed=0
+" let g:ctrlp_mruf_max=500
+" let g:ctrlp_follow_symlinks=1
+
+"
+let g:miniBufExplBRSplit = 0
+
+"leaderf
+" don't show the help in normal mode
+let g:Lf_HideHelp = 1
+let g:Lf_UseCache = 0
+let g:Lf_UseVersionControlTool = 0
+let g:Lf_IgnoreCurrentBufferName = 1
+" popup mode
+" let g:Lf_WindowPosition = 'popup'
+" let g:Lf_PreviewInPopup = 1
+" let g:Lf_StlSeparator = { 'left': "\ue0b0", 'right': "\ue0b2", 'font': "DejaVu Sans Mono for Powerline" }
+" let g:Lf_PreviewResult = {'Function': 0, 'BufTag': 0 }
+
+let g:Lf_ShortcutF = '<leader>p'
+noremap <leader>fb :<C-U><C-R>=printf("Leaderf buffer %s", "")<CR><CR>
+noremap <leader>fm :<C-U><C-R>=printf("Leaderf mru %s", "")<CR><CR>
+noremap <leader>ft :<C-U><C-R>=printf("Leaderf bufTag %s", "")<CR><CR>
+noremap <leader>fl :<C-U><C-R>=printf("Leaderf line %s", "")<CR><CR>
+
+noremap <C-B> :<C-U><C-R>=printf("Leaderf! rg --current-buffer -e %s ", expand("<cword>"))<CR>
+noremap <C-F> :<C-U><C-R>=printf("Leaderf! rg -e %s ", expand("<cword>"))<CR>
+" search visually selected text literally
+" xnoremap gf :<C-U><C-R>=printf("Leaderf! rg -F -e %s ", leaderf#Rg#visual())<CR>
+" noremap go :<C-U>Leaderf! rg --recall<CR>
+
+" should use `Leaderf gtags --update` first
+" let g:Lf_GtagsAutoGenerate = 0
+" let g:Lf_Gtagslabel = 'native-pygments'
+" noremap <leader>fr :<C-U><C-R>=printf("Leaderf! gtags -r %s --auto-jump", expand("<cword>"))<CR><CR>
+" noremap <leader>fd :<C-U><C-R>=printf("Leaderf! gtags -d %s --auto-jump", expand("<cword>"))<CR><CR>
+" noremap <leader>fo :<C-U><C-R>=printf("Leaderf! gtags --recall %s", "")<CR><CR>
+" noremap <leader>fn :<C-U><C-R>=printf("Leaderf gtags --next %s", "")<CR><CR>
+" noremap <leader>fp :<C-U><C-R>=printf("Leaderf gtags --previous %s", "")<CR><CR>
+
+"key mapping
+map <silent> <F4> : call MyDisplayToggle()<CR>
+
+function MyDisplayToggle()
+  let b:my_display_enabled = exists('b:my_display_enabled') ? !b:my_display_enabled : 0
+  if b:my_display_enabled
+      set fdc=0
+      set nu
+      set nopaste
+  else
+      set fdc=0
+      set nonu
+      set paste
+    endif
+   if exists("g:loaded_Signature")
+       SignatureToggle
+   endif
+endfunction
+
+"TagbarToggle
+nmap <F5> :TagbarToggle<CR>
+let g:tagbar_left = 1
+
+"NERDTree
+map <F6> :NERDTreeToggle<CR>
+let NERDTreeWinPos="right"
+let g:tagbar_width = 30
+" let g:tagbar_autofocus = 1
+let g:tagbar_sort = 0
+
+"map <F3> <ESC>:exec &mouse!=""? "set mouse=" : "set mouse=nv"<CR>
+
+"use :set ttymouse=sgr to choose the newest/best encoding that has support for inifinite coordinates.
+set ttymouse=sgr
+
+set mouse=nv
+nnoremap <F3> :call ToggleMouse()<CR>
+function! ToggleMouse()
+  " " check if mouse is enabled
+  " " if &mouse == 'a'
+  if &mouse == 'nv'
+      " " disable mouse
+      set mouse=
+      echo "disable mouse"
+  " " elseif &mouse == 'nv'
+  "    " disable mouse
+     " " set mouse=
+     " " echo "disable mouse"
+  " "elseif &mouse == ''
+  " "    set mouse=nv
+  " "    echo "mouse nv mode"
+  else
+  " "enable mouse everywhere
+  " " set mouse=a
+  set mouse=nv
+  echo "mouse enabled"
+  endif
+endfunc
+
+"move around windows with Ctrl-direction
+" nnoremap <C-h> <C-w>h
+" nnoremap <C-l> <C-l>l
+
+"设置切换Buffer快捷键
+nnoremap <C-N> :bn<CR>
+nnoremap <C-P> :bp<CR>
+
+"ack.vim
+if executable('ag')
+" let g:ackprg = 'ag --vimgrep'
+let g:ackprg = 'ag --nogroup --nocolor --column'
+" noremap FF :Ack<Space>
+cnoreabbrev Ack Ack!
+nnoremap <Leader>a :Ack!<Space>
+" noremap <Leader>a :<C-U><C-R>=printf("Ack! %s ", expand("<cword>"))<CR>
+else
+" noremap FF :echo "you need to install ack or ag first"<Enter>
+noremap <Leader>a :echo "you need to install ack or ag first"<Enter>
+endif
+let g:ackhighlight = 1
+
+"far.vim
+set lazyredraw            " improve scrolling performance when navigating through large results
+"set regexpengine=1        " use old regexp engine
+let g:far#source="rg"
+let g:far#enable_undo=1
+noremap <leader>fa :<C-U><C-R>=printf("F %s **/*.* --source=ag ", expand("<cword>"))<CR>
+noremap <leader>fc :<C-U><C-R>=printf("F %s **/*.c --source=ag ", expand("<cword>"))<CR>
+noremap <leader>fh :<C-U><C-R>=printf("F %s **/*.h --source=ag ", expand("<cword>"))<CR>
+
+
+" nmap <F2> :SrcExplToggle<CR>
+" let g:SrcExpl_pluginList = [
+      " " \ "__Tag_List__",
+      " " \ "_NERD_tree_",
+      " " \ "Source_Explorer"
+  " " \ ]
+
+" " // Set the height of Source Explorer window
+" let g:SrcExpl_winHeight = 8
+
+" " // Set 100 ms for refreshing the Source Explorer
+" let g:SrcExpl_refreshTime = 100
+
+" " // Set "Enter" key to jump into the exact definition context
+" let g:SrcExpl_jumpKey = "<ENTER>"
+
+" " // Set "Space" key for back from the definition context
+" let g:SrcExpl_gobackKey = "<SPACE>"
+
+" " // Enable/Disable the local definition searching, and note that this is not
+" " // guaranteed to work, the Source Explorer doesn't check the syntax for now.
+" " // It only searches for a match with the keyword according to command 'gd'
+" let g:SrcExpl_searchLocalDef = 1
+
+" " // Workaround for Vim bug @https://goo.gl/TLPK4K as any plugins using autocmd for
+" " // BufReadPre might have conflicts with Source Explorer. e.g. YCM, Syntastic etc.
+" let g:SrcExpl_nestedAutoCmd = 1
+
+" " // Do not let the Source Explorer update the tags file when opening
+" let g:SrcExpl_isUpdateTags = 0
+
+" " // Use 'Exuberant Ctags' with '--sort=foldcase -R .' or '-L cscope.files' to
+" " // create/update the tags file
+" let g:SrcExpl_updateTagsCmd = "ctags --sort=foldcase -R ."
+
+" " // Set "<F11>" key for updating the tags file artificially
+" let g:SrcExpl_updateTagsKey = "<F11>"
+
+" " // Set "<F7>" key for displaying the previous definition in the jump list
+" let g:SrcExpl_prevDefKey = "<F7>"
+
+" " // Set "<F8>" key for displaying the next definition in the jump list
+" let g:SrcExpl_nextDefKey = "<F8>"
+
+" for nerdcommenter
+let g:NERDSpaceDelims=1
+let g:NERDAltDelims_java = 1
+let g:NERDAltDelims_c = 1
+
+"easy-motion
+map <leader>s <Plug>(easymotion-s2)
+
+"git-blame.vim
+nnoremap <Leader>b :<C-u>call gitblame#echo()<CR>
+
+" YouCompleteMe
+" let g:ycm_global_ycm_extra_conf='~/.vim/bundle/YouCompleteMe/.ycm_extra_conf.py'
+let g:ycm_auto_hover=""
+" nmap <leader>d <plug>(YCMHover)
+" augroup MyYCMCustom
+" " autocmd!
+" " autocmd FileType c,cpp let b:ycm_hover = {
+  " " \ 'command': 'GetDoc',
+  " " \ 'syntax': &filetype
+  " " \ }
+" augroup END
+
+set completeopt=menu
+let g:ycm_add_preview_to_completeopt = 0
+let g:ycm_show_diagnostics_ui = 0
+let g:ycm_confirm_extra_conf=0
+" let g:ycm_key_invoke_completion = '<leader>f'
+let g:ycm_confirm_extra_conf=0
+let g:ycm_echo_current_diagnostic = 0
+" let g:ycm_python_binary_path='/usr/bin/python3'
+let g:ycm_echo_current_diagnostic = 0
+let g:ycm_enable_diagnostic_signs = 0
+let g:ycm_enable_diagnostic_highlighting = 0
+let g:ycm_autoclose_preview_window_after_completion=1 " auto-close preview window after select a completion string
+let g:ycm_autoclose_preview_window_after_insertion=1 " close preview window after leaving insert mode
+let g:ycm_seed_identifiers_with_syntax=1 " 語法關鍵字補全
+let g:ycm_min_num_of_chars_for_completion=2
+autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+" let g:ycm_filetype_whitelist = {
+			" " \ "c":1,
+			" " \ "cpp":1,
+			" " \ "objc":1,
+			" " \ "python": 1,
+			" " \ "sh":1,
+			" " \ "zsh":1,
+			" " \ "vim":1,
+			" " \ "Makefile":1,
+          " " \}
+" if &cp || exists('g:loaded_fastpaste')
+	" " finish
+" endif
+
+" let g:loaded_fastpaste = 1
+
+" function! s:paste_toggled(new, old) abort
+  " " if a:new && !a:old
+      " " let b:saved_foldexpr = &foldexpr
+      " " let &l:foldexpr = ''
+  " " elseif !a:new && a:old && exists('b:saved_foldexpr')
+      " " let &l:foldexpr = b:saved_foldexpr
+      " " unlet b:saved_foldexpr
+  " " endif
+" endfunc
+
+" augroup FastPaste
+  " " autocmd OptionSet paste call s:paste_toggled(v:option_new, v:option_old)
+" augroup END
+

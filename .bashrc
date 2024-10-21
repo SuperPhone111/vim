@@ -129,7 +129,11 @@ alias mgrep='grep --color -n -r --include \*.mk --include \*.sh --include Makefi
 alias cgrep='grep --color -n -r --include \*.cpp --include \*.c --include \*.h' 
 alias hgrep='grep --color -n -r --include \*.h' 
 alias shgrep='grep --color -n -r --include \*.sh' 
+alias pgrep='grep --color -n -r --include \*.py'·
+alias sgrep='grep --color -n -r --include \*.s --include \*.S --include \*.S.*'·
 
 # export LANGUAGE="zh_TW.UTF-8"
 # export LANG="zh_TW.UTF-8"
 # export LC_ALL="zh_TW.UTF-8"
+
+# stty stop '';stty start '';
